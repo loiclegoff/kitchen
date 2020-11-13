@@ -1,0 +1,5 @@
+# Prisma Migrate lockfile v1
+
+20201113210808-initial-migration
+20201113214558-add-product
+20201113222054-updates-core-models
