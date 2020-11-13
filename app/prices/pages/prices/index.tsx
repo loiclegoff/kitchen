@@ -23,7 +23,7 @@ export const PricesList = () => {
         {prices.map((price) => (
           <li key={price.id}>
             <Link href={`/prices/${price.id}`}>
-              <a>{price.name}</a>
+              <a>{price.value}</a>
             </Link>
           </li>
         ))}

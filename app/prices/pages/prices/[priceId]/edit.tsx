@@ -22,7 +22,7 @@ export const EditPrice = () => {
           try {
             const updated = await updatePriceMutation({
               where: { id: price.id },
-              data: { name: "MyNewName" },
+              data: { value: 100 },
             })
             await setQueryData(updated)
             alert("Success!" + JSON.stringify(updated))
