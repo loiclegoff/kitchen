@@ -1,5 +1,5 @@
-import React, {PropsWithoutRef} from "react"
-import {useField} from "react-final-form"
+import React, { PropsWithoutRef } from "react"
+import { useField } from "react-final-form"
 
 export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
   /** Field name. */
@@ -12,46 +12,38 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
 }
 
 export const LabeledTextField = React.forwardRef<HTMLInputElement, LabeledTextFieldProps>(
-  ({name, label, outerProps, ...props}, ref) => {
+  ({ name, label, outerProps, ...props }, ref) => {
     const {
       input,
-      meta: {touched, error, submitError, submitting},
+      meta: { touched, error, submitError, submitting },
     } = useField(name)
 
     const normalizedError = Array.isArray(error) ? error.join(", ") : error || submitError
+    const showError = touched && normalizedError
 
     return (
-      <div {...outerProps}>
-        <label>
+      <div className="mb-4" {...outerProps}>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
           {label}
-          <input {...input} disabled={submitting} {...props} ref={ref} />
+          <input
+            className={`shadow appearance-none border${
+              showError ? " border-red-500" : ""
+            } rounded w-full py-2 px-3 text-gray-700`}
+            {...input}
+            disabled={submitting}
+            {...props}
+            ref={ref}
+          />
         </label>
 
-        {touched && normalizedError && (
-          <div role="alert" style={{color: "red"}}>
+        {showError && (
+          <div className="text-red-500 text-xs italic" role="alert">
             {normalizedError}
           </div>
         )}
-
-        <style jsx>{`
-          label {
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-            font-size: 1rem;
-          }
-          input {
-            font-size: 1rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 3px;
-            border: 1px solid purple;
-            appearance: none;
-            margin-top: 0.5rem;
-          }
-        `}</style>
       </div>
     )
-  },
+  }
 )
 
 export default LabeledTextField

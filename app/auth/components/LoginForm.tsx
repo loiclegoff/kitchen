@@ -4,20 +4,22 @@ import { LabeledTextField } from "app/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/components/Form"
 import login from "app/auth/mutations/login"
 import { LoginInput } from "app/auth/validations"
+import Title from "app/components/Title"
+import { texts } from "app/i18n"
 
 type LoginFormProps = {
   onSuccess?: () => void
 }
 
-export const LoginForm = (props: LoginFormProps) => {
+const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
 
   return (
-    <div>
-      <h1>Login</h1>
-
+    <div className="max-w-md w-full py-12 px-6">
+      <Title title={texts.main.login} />
       <Form
-        submitText="Login"
+        submitText={texts.auth.connect}
+        submitClassName="relative block w-full py-2 px-3 border border-transparent rounded-md text-white font-semibold bg-blue-900 hover:bg-blue-800 focus:bg-blue-800 focus:outline-none focus:shadow-outline sm:text-sm"
         schema={LoginInput}
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
@@ -26,22 +28,26 @@ export const LoginForm = (props: LoginFormProps) => {
             props.onSuccess?.()
           } catch (error) {
             if (error instanceof AuthenticationError) {
-              return { [FORM_ERROR]: "Sorry, those credentials are invalid" }
+              return { [FORM_ERROR]: texts.auth.errors.notValidCredentials }
             } else {
               return {
-                [FORM_ERROR]:
-                  "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
+                [FORM_ERROR]: texts.auth.errors.unexpectedError + error.toString(),
               }
             }
           }
         }}
       >
-        <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
+        <LabeledTextField name="email" label={texts.auth.email} placeholder={texts.auth.email} />
+        <LabeledTextField
+          name="password"
+          label={texts.auth.password}
+          placeholder={texts.auth.password}
+          type="password"
+        />
       </Form>
 
       <div style={{ marginTop: "1rem" }}>
-        Or <Link href="/signup">Sign Up</Link>
+        {texts.main.or} <Link href="/signup">{texts.main.signUp}</Link>
       </div>
     </div>
   )

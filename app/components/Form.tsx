@@ -8,6 +8,7 @@ type FormProps<S extends z.ZodType<any, any>> = {
   children: ReactNode
   /** Text to display in the submit button */
   submitText: string
+  submitClassName?: string
   schema?: S
   onSubmit: FinalFormProps<z.infer<S>>["onSubmit"]
   initialValues?: FinalFormProps<z.infer<S>>["initialValues"]
@@ -16,6 +17,7 @@ type FormProps<S extends z.ZodType<any, any>> = {
 export function Form<S extends z.ZodType<any, any>>({
   children,
   submitText,
+  submitClassName,
   schema,
   initialValues,
   onSubmit,
@@ -39,20 +41,18 @@ export function Form<S extends z.ZodType<any, any>>({
           {children}
 
           {submitError && (
-            <div role="alert" style={{ color: "red" }}>
+            <div className="text-red-500 text-xs italic" role="alert">
               {submitError}
             </div>
           )}
 
-          <button type="submit" disabled={submitting}>
+          <button
+            className={submitClassName ? submitClassName : "btn-blue"}
+            type="submit"
+            disabled={submitting}
+          >
             {submitText}
           </button>
-
-          <style global jsx>{`
-            .form > * + * {
-              margin-top: 1rem;
-            }
-          `}</style>
         </form>
       )}
     />

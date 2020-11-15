@@ -4,6 +4,7 @@ import { queryCache } from "react-query"
 import LoginForm from "app/auth/components/LoginForm"
 
 import "app/styles/index.css"
+import { texts } from "app/i18n"
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
@@ -26,12 +27,16 @@ export default function App({ Component, pageProps }: AppProps) {
 
 function RootErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   if (error instanceof AuthenticationError) {
-    return <LoginForm onSuccess={resetErrorBoundary} />
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <LoginForm onSuccess={resetErrorBoundary} />
+      </div>
+    )
   } else if (error instanceof AuthorizationError) {
     return (
       <ErrorComponent
         statusCode={(error as any).statusCode}
-        title="Sorry, you are not authorized to access this"
+        title={texts.auth.errors.notAuthorized}
       />
     )
   } else {
